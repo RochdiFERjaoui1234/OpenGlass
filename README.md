@@ -4,8 +4,42 @@ Open-source image-level backup/replication platform in the spirit of Veeam
 Backup & Replication, built on libvirt/QEMU, NBD, and a restic-style
 content-addressable repository.
 
-Step-by-step user walkthroughs live in [`docs/`](docs/) (full backup,
-incrementals, live backups, instant recovery, file access, NATS jobs).
+[![Go](https://img.shields.io/badge/go-1.21%2B-00ADD8?logo=go)](https://go.dev)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](#license)
+[![QEMU](https://img.shields.io/badge/QEMU-6.2-red)](https://www.qemu.org)
+
+**What it does**
+
+- **Full image backups** of disks (shut-off or running) into a
+  deduplicated, compressed, encrypted repo — content-defined chunking,
+  SHA-256 addressed, like restic
+- **True incrementals** via QEMU dirty-bitmaps over NBD block status —
+  only blocks that actually changed are read and stored
+- **Live backups** of running domains — the guest pauses only across a
+  short freeze window; a failed cycle never leaves the VM suspended
+- **Instant recovery** — boot a transient VM straight off any restore
+  point while a proper restore proceeds behind it
+- **File-level restore + read-only NBD mount** without booting anything
+- **Job distribution** over NATS with a Postgres catalog and an
+  append-only metrics history (duration trends, audit trail)
+
+![System architecture](docs/img/openglass-architecture.png)
+
+Step-by-step user walkthroughs live in [`docs/`](docs/README.md):
+
+| | |
+|---|---|
+| [01 — Full backup & restore](docs/01-full-backup-restore.md) | Back up a shut-off disk, restore byte-identical |
+| [02 — Incremental backup](docs/02-incremental-backup.md) | Only changed blocks via dirty bitmaps |
+| [03 — Live backup](docs/03-live-backup.md) | Back up a RUNNING domain, seconds of pause |
+| [04 — Instant recovery](docs/04-instant-recovery.md) | Boot a VM off a restore point |
+| [05 — File access](docs/05-file-access.md) | Extract a file, export, or mount read-only |
+| [06 — Controller & worker](docs/06-controller-worker.md) | Backups as NATS jobs + metrics history |
+| [00 — Architecture](docs/00-architecture.md) | How it all fits together, on-disk formats, load-bearing decisions |
+
+## License
+
+MIT — see [LICENSE](LICENSE).
 
 ## Architecture
 
@@ -249,5 +283,3 @@ are the next increment, not this one.
 - Metrics (`prove-metrics.sh`) — worker → NATS → controller → real
   durations in `jobs` plus history rows; needs NATS/Postgres/virsh
 - Catalog — (planned) integration test against local Postgres
-#   O p e n G l a s s  
- 

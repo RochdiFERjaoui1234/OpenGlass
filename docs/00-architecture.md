@@ -90,6 +90,8 @@ remove → mint fresh `og-<id>` bitmap (still suspended: no write window) →
 resume (deferred, always runs after a suspend we did; failures unwind the
 overlay first).
 
+![Live incremental backup sequence](img/openglass-uml-sequence.png)
+
 **Restore / export / recover / mount / files.** All funnel through
 `materialize` (full base, then each ancestor's spans in order, truncate to
 logical size) or `ExportImage` (streaming for full points, file-backed for

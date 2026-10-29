@@ -1,0 +1,6 @@
+tmp/
+*.exe
+*.test
+coverage.out
+*-linux
+

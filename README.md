@@ -249,3 +249,5 @@ are the next increment, not this one.
 - Metrics (`prove-metrics.sh`) — worker → NATS → controller → real
   durations in `jobs` plus history rows; needs NATS/Postgres/virsh
 - Catalog — (planned) integration test against local Postgres
+#   O p e n G l a s s  
+ 
